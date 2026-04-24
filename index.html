@@ -1,11 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurascool</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Localizar Professor – SENAI</title>
+  <meta name="description" content="Sistema institucional SENAI para localização de professores em tempo real." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-   
+
+  <!-- ===== TOPO ===== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo-group">
+        <div class="logo-icon">
+         <img src="1.png" alt="logo" class="logo-senai">
+        </div>
+        <div>
+          <span class="logo-title">Localizar Professor</span>
+          <span class="logo-sub">SENAI</span>
+        </div>
+      </div>
+      <div class="header-actions" id="headerActions"></div>
+    </div>
+  </header>
+
+  <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+  <main class="app-main" id="appMain">
+
+    <!-- TELA 1: SELEÇÃO DE PERFIL -->
+    <section class="screen active" id="screenHome">
+      <div class="screen-center">
+        <div class="hero-badge">Sistema Institucional</div>
+        <h1 class="hero-title">Bem-vindo ao<br/><span class="text-red">Localizar Professor</span></h1>
+        <p class="hero-desc">Selecione seu perfil para continuar</p>
+        <div class="profile-cards">
+          <button class="profile-card" id="btnAluno" onclick="goToScreen('screenRegAluno')">
+            <div class="profile-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </div>
+            <span class="profile-label">Sou Aluno</span>
+            <span class="profile-desc">Localizar professores em tempo real</span>
+            <div class="profile-arrow">→</div>
+          </button>
+          <button class="profile-card" id="btnProfessor" onclick="goToScreen('screenRegProfessor')">
+            <div class="profile-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+              </svg>
+            </div>
+            <span class="profile-label">Sou Professor</span>
+            <span class="profile-desc">Atualizar minha localização e status</span>
+            <div class="profile-arrow">→</div>
+          </button>
+        </div>
+        <p class="footer-note">Dados protegidos conforme a LGPD · SENAI © 2025</p>
+      </div>
+    </section>
+
+    <!-- TELA 2A: REGISTRO ALUNO -->
+    <section class="screen" id="screenRegAluno">
+      <div class="form-container">
+        <div class="form-header">
+          <button class="btn-back" onclick="goToScreen('screenHome')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Voltar
+          </button>
+          <div class="form-badge">Acesso Aluno</div>
+          <h2 class="form-title">Identificação</h2>
+          <p class="form-desc">Preencha seus dados para localizar professores</p>
+        </div>
+        <form id="formAluno" class="form-body" onsubmit="submitAluno(event)" novalidate>
+          <div class="field-group">
+            <label class="field-label" for="alunoNome">Nome Completo <span class="req">*</span></label>
+            <input class="field-input" id="alunoNome" type="text" placeholder="Seu nome completo" autocomplete="name" />
+            <span class="field-error" id="errAlunoNome"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="alunoCpf">CPF <span class="req">*</span></label>
+            <input class="field-input" id="alunoCpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" />
+            <span class="field-error" id="errAlunoCpf"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="alunoCurso">Curso <span class="req">*</span></label>
+            <div class="select-wrap">
+              <select class="field-select" id="alunoCurso">
+                <option value="">Selecione seu curso</option>
+                <option>Técnico em Informática</option>
+                <option>Técnico em Mecatrônica</option>
+                <option>Técnico em Eletrotécnica</option>
+                <option>Técnico em Automação Industrial</option>
+                <option>Técnico em Logística</option>
+                <option>Técnico em Administração</option>
+                <option>Técnico em Edificações</option>
+                <option>Tecnico de Desenvolvimento de Sistemas</option>
+                <option>Técnico em Segurança do Trabalho</option>
+              </select>
+              <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <span class="field-error" id="errAlunoCurso"></span>
+          </div>
+          <button type="submit" class="btn-primary" id="btnSubmitAluno">
+            <span class="btn-text">Acessar Sistema</span>
+            <span class="btn-loader hidden"></span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TELA 2B: REGISTRO PROFESSOR -->
+    <section class="screen" id="screenRegProfessor">
+      <div class="form-container">
+        <div class="form-header">
+          <button class="btn-back" onclick="goToScreen('screenHome')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Voltar
+          </button>
+          <div class="form-badge form-badge--prof">Acesso Professor</div>
+          <h2 class="form-title">Identificação</h2>
+          <p class="form-desc">Cadastre-se para atualizar sua localização</p>
+        </div>
+        <form id="formProf" class="form-body" onsubmit="submitProfessor(event)" novalidate>
+          <div class="field-group">
+            <label class="field-label" for="profNome">Nome Completo <span class="req">*</span></label>
+            <input class="field-input" id="profNome" type="text" placeholder="Seu nome completo" autocomplete="name" />
+            <span class="field-error" id="errProfNome"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="profRegistro">Registro Funcional <span class="req">*</span></label>
+            <input class="field-input" id="profRegistro" type="text" placeholder="Ex: RF-00123" />
+            <span class="field-error" id="errProfRegistro"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="profArea">Área de Atuação <span class="req">*</span></label>
+            <div class="select-wrap">
+              <select class="field-select" id="profArea">
+                <option value="">Selecione sua área</option>
+                <option>Informática e Tecnologia</option>
+                <option>Mecânica e Mecatrônica</option>
+                <option>Eletrotécnica e Automação</option>
+                <option>Logística e Administração</option>
+                <option>Edificações e Infraestrutura</option>
+                <option>Segurança do Trabalho</option>
+                <option>Meio Ambiente</option>
+                <option>Design e Comunicação Visual</option>
+              </select>
+              <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <span class="field-error" id="errProfArea"></span>
+          </div>
+          <button type="submit" class="btn-primary" id="btnSubmitProf">
+            <span class="btn-text">Acessar Painel</span>
+            <span class="btn-loader hidden"></span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TELA 3: DASHBOARD ALUNO -->
+    <section class="screen" id="screenAluno">
+      <div class="dashboard-container">
+        <div class="dashboard-header">
+          <div>
+            <h2 class="dash-title">Professores Disponíveis</h2>
+            <p class="dash-sub">Atualização em tempo real</p>
+          </div>
+          <div class="dash-filter">
+            <label class="sr-only" for="filtroAluno">Filtrar por curso</label>
+            <div class="select-wrap select-wrap--sm">
+              <select class="field-select field-select--sm" id="filtroAluno" onchange="filtrarProfessores()">
+                <option value="">Todos os cursos</option>
+                <option>Técnico em Informática</option>
+                <option>Técnico em Mecatrônica</option>
+                <option>Técnico em Eletrotécnica</option>
+                <option>Técnico em Automação Industrial</option>
+                <option>Técnico em Logística</option>
+                <option>Técnico em Administração</option>
+              </select>
+              <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span class="live-text">AO VIVO</span>
+          <span class="live-count" id="liveCount">0 professores</span>
+        </div>
+
+        <div class="prof-grid" id="profGrid">
+          <!-- cards injetados via JS -->
+        </div>
+
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-icon">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6M11 8v6"/></svg>
+          </div>
+          <p class="empty-title">Nenhum professor encontrado</p>
+          <p class="empty-desc">Tente outro filtro ou aguarde atualizações</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELA 4: DASHBOARD PROFESSOR -->
+    <section class="screen" id="screenProfessor">
+      <div class="dashboard-container">
+        <div class="dashboard-header">
+          <div>
+            <h2 class="dash-title">Meu Status</h2>
+            <p class="dash-sub" id="profWelcome">Olá, professor!</p>
+          </div>
+          <div class="status-badge-current" id="currentStatusBadge">
+            <span class="status-dot status-dot--amarelo"></span>
+            <span>Fora</span>
+          </div>
+        </div>
+
+        <div class="update-card">
+          <h3 class="update-card-title">Atualizar Localização</h3>
+
+          <div class="field-group">
+            <label class="field-label" for="profCursoAtual">Curso que está ministrando</label>
+            <div class="select-wrap">
+              <select class="field-select" id="profCursoAtual">
+                <option value="">Selecione o curso</option>
+                <option>Técnico em Informática</option>
+                <option>Técnico em Mecatrônica</option>
+                <option>Técnico em Eletrotécnica</option>
+                <option>Técnico em Automação Industrial</option>
+                <option>Técnico em Logística</option>
+                <option>Técnico em Administração</option>
+                <option>Técnico em Edificações</option>
+              </select>
+              <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="profSalaAtual">Sala</label>
+            <div class="select-wrap">
+              <select class="field-select" id="profSalaAtual">
+                <option value="">Selecione a sala</option>
+                <option>Sala 01</option>
+                <option>Sala 02</option>
+                <option>Sala 03</option>
+                <option>Sala 04</option>
+                <option>Sala 05</option>
+                <option>Lab. Informática 1</option>
+                <option>Lab. Informática 2</option>
+                <option>Lab. Mecatrônica</option>
+                <option>Lab. Elétrica</option>
+                <option>Auditório</option>
+                <option>Biblioteca</option>
+                <option>Coordenação</option>
+              </select>
+              <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Status atual</label>
+            <div class="status-buttons">
+              <button type="button" class="status-btn status-btn--verde" id="statusEmAula" onclick="selectStatus('Em aula')">
+                <span class="status-btn-dot"></span> Em aula
+              </button>
+              <button type="button" class="status-btn status-btn--amarelo active-status" id="statusFora" onclick="selectStatus('Fora')">
+                <span class="status-btn-dot"></span> Fora
+              </button>
+              <button type="button" class="status-btn status-btn--vermelho" id="statusAusente" onclick="selectStatus('Ausente')">
+                <span class="status-btn-dot"></span> Ausente
+              </button>
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary btn-update" id="btnAtualizar" onclick="atualizarStatus()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M2.5 22v-6h6"/><path d="M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+            <span class="btn-text">Atualizar Status</span>
+            <span class="btn-loader hidden"></span>
+          </button>
+
+          <div class="feedback-box hidden" id="feedbackBox">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+            <span id="feedbackMsg">Status atualizado com sucesso!</span>
+          </div>
+        </div>
+
+        <div class="info-card" id="profInfoCard">
+          <h4 class="info-card-title">Como os alunos te veem</h4>
+          <div class="preview-card">
+            <div class="preview-top">
+              <div class="avatar" id="previewAvatar">JP</div>
+              <div>
+                <p class="preview-name" id="previewNome">—</p>
+                <p class="preview-area" id="previewArea">—</p>
+              </div>
+              <div class="status-badge status-badge--amarelo" id="previewStatus">Fora</div>
+            </div>
+            <div class="preview-details">
+              <div class="preview-detail">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                <span id="previewCurso">—</span>
+              </div>
+              <div class="preview-detail">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span id="previewSala">—</span>
+              </div>
+              <div class="preview-detail">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="previewAtualizado">Agora mesmo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TOAST GLOBAL -->
+  <div class="toast hidden" id="globalToast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
