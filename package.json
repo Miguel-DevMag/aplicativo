@@ -1,0 +1,29 @@
+{
+  "name": "localizar-professor-senai",
+  "version": "1.0.0",
+  "description": "Sistema institucional SENAI para localização de professores em tempo real",
+  "main": "index.html",
+  "scripts": {
+    "build": "node build.js",
+    "cap:sync": "node build.js && npx cap sync",
+    "cap:open": "npx cap open android",
+    "cap:run": "npx cap run android"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miguel-DevMag/aplicativo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Miguel-DevMag/aplicativo/issues"
+  },
+  "homepage": "https://github.com/Miguel-DevMag/aplicativo#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/cli": "^8.3.1",
+    "@capacitor/core": "^8.3.1"
+  }
+}
